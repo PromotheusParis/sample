@@ -1,0 +1,20 @@
+#Streams
+version: '3.7'
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    networks: 
+      - streams
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - VERSION=docker
+      - TZ=America/New_York
+    ports:
+      - 32400:32400
+    volumes:
+      - /root/work/docker/3-Streams/plex/config:/config
+      - /root/work/data/cloud/crypt:/data/
+    cpus: 1
+    restart: unless-stopped

@@ -1,0 +1,24 @@
+#Admins
+version: '3.7'
+services:
+  crypt:
+    container_name: crypt
+    image: rclone/rclone:latest
+    restart: always
+    volumes:
+      - /root/work/docker/1-Admin/rclone/config/:/config/rclone/
+      - /root/work/data/cache/:/config/cache/
+      - /root/work/data/cloud/:/data:shared
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+    cap_add:
+      - SYS_ADMIN
+    environment:
+      - PHP_TZ=America/New_York
+    devices:
+      - /dev/fuse
+    security_opt:
+      - apparmor:unconfined
+    command: "mount crypt: /data/crypt  --allow-other --buffer-size 256M --allow-non-empty --vfs-cache-mode full --vfs-read-ahead 1G --vfs-cache-max-size 80G --cache-dir /config/cache/ -P --transfers 4 --vfs-cache-max-age 3h -vv"
+    cpus: '1'
+    restart: unless-stopped
